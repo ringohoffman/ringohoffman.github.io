@@ -61,4 +61,4 @@ Disallow: /
 User-agent: ZoominfoBot
 Disallow: /
 
-Sitemap: https://blogu.fish/sitemap.xml
+Sitemap: https://ringohoffman.github.io/sitemap.xml
