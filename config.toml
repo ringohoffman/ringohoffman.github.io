@@ -644,13 +644,21 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
         name = "Categories"
         url = "/categories/"
         title = ""
+      # [[languages.en.menu.main]]
+      #   weight = 4
+      #   identifier = "documentation"
+      #   pre = ""
+      #   post = ""
+      #   name = "Docs"
+      #   url = "/categories/documentation/"
+      #   title = ""
       [[languages.en.menu.main]]
-        weight = 4
-        identifier = "documentation"
+        weight = 5
+        identifier = "resume"
         pre = ""
         post = ""
-        name = "Docs"
-        url = "/categories/documentation/"
+        name = "Resume"
+        url = "/matthewhoffman_resume.pdf"
         title = ""
       [[languages.en.menu.main]]
         weight = 5
