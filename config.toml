@@ -1,7 +1,7 @@
 baseURL = "https://ringohoffman.github.io"
 
 # theme
-theme = "LoveIt"
+theme = "DoIt"
 # themes directory
 themesDir = "themes/"
 

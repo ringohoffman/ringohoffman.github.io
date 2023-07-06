@@ -1,3 +1,4 @@
-[submodule "themes/LoveIt"]
-	path = themes/LoveIt
-	url = git@github.com:ringohoffman/LoveIt.git
+[submodule "themes/DoIt"]
+	path = themes/DoIt
+	url = git@github.com:HEIGE-PCloud/DoIt.git
+	branch = main
