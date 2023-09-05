@@ -3,7 +3,7 @@
 
 ## Background and Motivation
 
-I recently had a conversation with a few of my coworkers where I had mentioned that Python is a strongly typed language. One of them didn't think that it was, and another explained that strong typing means that every object has a type, which is true about Python but is not the definition of strong typing. It surprised me to realize that even though my coworkers and I are experienced Python developers, none of us had a clear understanding of strong typing. This inspired me to write this post to help disambiguate Python and its runtime and static type systems.
+I recently had a conversation with a few of my colleagues where I had mentioned that Python is a strongly typed language. One of them didn't think that it was, and another explained that strong typing means that every object has a type, which is true about Python but is not the definition of strong typing. It surprised me to realize that even though my colleagues and I are experienced Python developers, none of us had a clear understanding of strong typing. This inspired me to write this post to help disambiguate Python and its runtime and static type systems.
 
 ## Compiled vs. Interpreted Languages
 
@@ -246,6 +246,28 @@ def go_flying(obj: CanFly) -> None:
 go_flying(duck)    # OK
 go_flying(person)  # static typing error: "fly" is not present
 ```
+
+## Recap
+
+> Is Python an interpreted language?
+
+Python is considered an interpreted language because its reference implementation, CPython, compiles Python code into bytecode at runtime before interpreting it.
+
+> Is Python a dynamically typed language?
+
+Python is a dynamically typed language because it allows variables to be reassigned to values of different types.
+
+> Is Python a strongly typed language?
+
+Python is considered a strongly typed language because most type changes require explicit conversions.
+
+> Is Python's static type system nominally or structurally typed?
+
+Python's static type system is generally nominally typed, but `collections.abc` provides a collection of useful structural types, and `typing.Protocol` provides a way to define custom structural types.
+
+> Is Python a duck typed language?
+
+Python's runtime type system is duck typed because it determines type compatibility by checking only the parts of an object's structure that are accessed at runtime.
 
 ## Sources
 
