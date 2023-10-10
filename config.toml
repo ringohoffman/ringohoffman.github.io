@@ -676,6 +676,14 @@ ignoreErrors = ["error-remote-getjson", "error-missing-instagram-accesstoken"]
         name = ""
         url = "https://github.com/ringohoffman/ringohoffman.github.io"
         title = "Source"
+      [[languages.en.menu.main]]
+        weight = 6
+        identifier = "linkedin"
+        pre = "<i class='fab fa-brands fa-linkedin-in'></i>"
+        post = ""
+        name = ""
+        url = "https://www.linkedin.com/in/matthew-hoffman-018521107"
+        title = ""
     [languages.en.params]
       [languages.en.params.search]
         enable = true
