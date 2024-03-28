@@ -56,11 +56,7 @@ add_ints(1, 1)  # OK
 add_ints(1.0, 1.0)  # static typing error: "float" is not a subtype of "int"
 ```
 
-Abstract base classes (see [`abc`](https://docs.python.org/3/library/abc.html)) allow you to define interfaces via inheritance, i.e. nominally. A class is abstract (not instantiable) if it inherits from [`abc.ABC`](https://docs.python.org/3/library/abc.html#abc.ABC) or its [metaclass](https://docs.python.org/3/reference/datamodel.html#metaclasses) is [`abc.ABCMeta`](https://docs.python.org/3/library/abc.html#abc.ABCMeta) and it has at least one abstract method (a method decorated by [`abc.abstractmethod`](https://docs.python.org/3/library/abc.html#abc.abstractmethod)). All abstract methods must be implemented by a subclass in order for that subclass to be concrete (instantiable).
-
-{{< admonition type=tip title="When to use Protocols vs. ABCs " open=true >}}
-While not all `ABC` methods need to be abstract, if an `ABC` doesn't have any non-abstract methods, I recommend using [`typing.Protocol`](#Protocol) as a less restrictive alternative.
-{{< /admonition >}}
+Abstract base classes (see [`abc`](https://docs.python.org/3/library/abc.html)) allow you to define interfaces via inheritance, i.e. nominally. A class is abstract if it inherits from [`abc.ABC`](https://docs.python.org/3/library/abc.html#abc.ABC) or its [metaclass](https://docs.python.org/3/reference/datamodel.html#metaclasses) is [`abc.ABCMeta`](https://docs.python.org/3/library/abc.html#abc.ABCMeta) and it has at least one abstract method (a method decorated by [`abc.abstractmethod`](https://docs.python.org/3/library/abc.html#abc.abstractmethod)). All abstract methods must be implemented by a subclass in order for that subclass to be concrete (instantiable).
 
 [`abc.ABC.register`](https://docs.python.org/3/library/abc.html#abc.ABCMeta.register) allows you to register an abstract base class as a "virtual superclass" of an arbitrary type. This allows virtual subclasses to pass runtime type checks like `isinstance` and `issubclass`, but has no effect on static type compatibility:
 
@@ -123,7 +119,7 @@ add_numbers("012")  # static typing error: "str" is not a subtype of "int"
 
 Similar to `abc.ABC`, subclasses of `collections.abc` classes are nominally typed, which limits their usefulness for static typing.
 
-[`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol) provides a way to define **custom** structural types in Python. Any class that defines the same attributes and methods as a `Protocol` is considered to be a static subtype of that `Protocol`:
+[`typing.Protocol`](https://docs.python.org/3/library/typing.html#typing.Protocol) provides a way to define **custom** structural types in Python. Any class that defines the same attributes and methods as a `Protocol` is considered to be a subtype of that `Protocol`:
 
 ```python
 from typing import Protocol
@@ -147,7 +143,62 @@ print_name(Place("San Francisco"))   # OK
 print_name("Austin")                 # static typing error: "name" is not present
 ```
 
-[`typing.runtime_checkable`](https://docs.python.org/3/library/typing.html#typing.runtime_checkable) is a decorator for `Protocol` classes that allows you to perform runtime type checks against `Protocol`s (with one exception):
+`Protocol` is a special type of `ABC`. Its metaclass is `_ProtocolMeta`, a subclass of `ABCMeta`, and so it can be used as a drop-in replacement for `ABC` with one caveat: `Protocol` classes cannot inherit from non-`Protocol` classes.
+
+```Python
+import abc
+from typing import Any, Protocol
+
+class Module:
+    def forward(self) -> Any:
+        raise NotImplementedError("forward not implemented.")
+
+class MyModuleABC(abc.ABC, Module):        # OK
+    @abc.abstractmethod
+    def my_method(self) -> None:
+        ...
+
+class MyModuleProtocol(Protocol, Module):  # TypeError: Protocols can only inherit from other protocols, got <class 'Module'>
+    @abc.abstractmethod
+    def my_method(self) -> None:
+        ...
+```
+
+While `Protocol`s do not require the use of inheritance, inheritance can still be used to provide default implementations of methods or default values for attributes:
+
+```Python
+from typing import Protocol
+
+class SomeProtocol(Protocol):
+    my_attribute: int = 1
+
+    def method(self) -> str:
+        return "default implementation!"
+
+class MySubclass(SomeProtocol):
+    ...
+
+my_subclass = MySubclass()
+print(my_subclass.my_attribute)  # 1
+print(my_subclass.method())      # default implementation!
+```
+
+{{< admonition type=tip title="When to use Protocols vs. ABCs " open=true >}}
+`Protocol`s are intended to define minimal interfaces for specific functionality without the use of inheritance. Consider using one when:
+
+1. Your interface is self-contained and is not implicitly required to be an instance of another type. Any functionality or structures that a `Protocol` depends on should be internally defined.
+2. It is feasible to implement to your interface without using inheritance. You should avoid having methods with default implementations that would be impractical for someone to reimplement.
+3. Your interface is not likely to change, since they are not guaranteed to be automatically consumed via inheritance.
+
+Conversely, consider using an `ABC` if:
+
+1. Your interface is extending another class.
+2. Your interface is broad and not focused on a specific functionality.
+3. Your interface has complex default implementations.
+4. Your interface is likely to change.
+{{< /admonition >}}
+
+[`typing.runtime_checkable`](https://docs.python.org/3/library/typing.html#typing.runtime_checkable) is a decorator for `Protocol` classes that allows you to perform runtime type checks against them (with one exception):
 
 ```python
 from typing import Protocol, runtime_checkable
