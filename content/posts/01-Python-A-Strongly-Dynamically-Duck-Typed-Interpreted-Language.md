@@ -22,7 +22,6 @@ twemoji: false
 lightgallery: true
 ruby: true
 fraction: true
-fontawesome: true
 linkToMarkdown: true
 rssFullText: false
 
